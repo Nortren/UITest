@@ -11,5 +11,9 @@
   "scripts": {
     "test": "jest",
     "test.watch": "jest --watchAll"
+  },
+  "dependencies": {
+    "@playwright/test": "^1.14.1",
+    "pm2": "^5.1.1"
   }
 }

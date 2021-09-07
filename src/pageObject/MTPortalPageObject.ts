@@ -53,7 +53,6 @@ class InputTextArea {
 
     async writeText(inputText: string) {
         await this.page.fill('textarea[id="standard-multiline-static-from"]', inputText);
-        await this.page.waitForTimeout(7000);
     }
 
     async clearArea() {
@@ -70,15 +69,7 @@ class OutputTextArea {
     }
 
     async clickCancelButton(){
-
-      // const cancelButton = await this.page.$('//*[@id="root"]/div/div/div[2]/div/div[2]/div[2]/div/div[2]/div[3]/div/button');
-      // await cancelButton?.click();
-      //   await this.page.click('button:has-text("Cancel translation")');
-      //   await this.page.click('text=Cancel translation');
-      //   await this.page.click('//*[@id="root"]/div/div/div[2]/div/div[2]/div[2]/div/div[2]/div[3]/div/button');
-        await this.page.click('text=Cancel translation');
-      // await this.page.click('//*[@id="root"]/div/div/div[2]/div/div[2]/div[2]/div/div[2]/div[3]/div/button');
-
+        await this.page.click('button:has-text("Cancel translation")');
     }
 
     async getContent(){
