@@ -10,10 +10,15 @@
   },
   "scripts": {
     "test": "jest",
+    "testUI": "npm run dev --prefix ./server/",
     "test.watch": "jest --watchAll"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@mui/x-data-grid": "^4.0.0",
     "@playwright/test": "^1.14.1",
+    "clsx": "^1.1.1",
     "pm2": "^5.1.1"
   }
 }
