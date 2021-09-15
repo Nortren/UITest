@@ -125,7 +125,7 @@ function StartTestButton() {
                         </svg>
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Mini variant drawer
+                        Test Runer CI
                     </Typography>
                 </Toolbar>
             </AppBar>

@@ -9,8 +9,8 @@ export class Autorization {
         this.page = page;
     }
     async init() {
-        const USERNAME = 'alexander.stromov@inten.to'
-        const PASSWORD = 'Agidel17'
+        const USERNAME = 'timofei.trunov+no-mtp@inten.to'
+        const PASSWORD = 'timofei.trunov+no-mtp@inten.to'
 
         await this.page.goto('https://portal-stage.inten.to/');
 
