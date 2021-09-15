@@ -1,6 +1,7 @@
 
 import express, {Request, Response, Router, Express} from 'express';
 import { RequestHandler } from 'express-serve-static-core';
+const path = require("path");
 // import {startTest} from '../../../server'
 // call express
 const execSync = require('child_process').execSync;
@@ -18,10 +19,13 @@ const port: number = Number(process.env.PORT) || 8050; // set our port
 // Send index.html on root request
 app.use(express.static('dist'));
 app.get('/api/test_get', (req:Request, res:Response) => {
-    // startTest()
-    console.log('test get  777');
     execSync('npm run test --prefix ../', {stdio:[0,1,2]});
 
+
+});
+app.get('/api/show_report', (req:Request, res:Response) => {
+    console.log(path.join(__dirname, '../../', 'index.html'),'DIR')
+    res.send(path.join(__dirname, '../../', 'jest_html_reporters.html'));
 
 });
 app.get('/api/get_structure', (req:Request, res:Response) => {

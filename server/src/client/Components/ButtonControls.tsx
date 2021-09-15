@@ -3,8 +3,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {ListItemIcon, ListItemText} from "@material-ui/core";
 
-export default function ButtonControls() {
+// @ts-ignore
+export default function ButtonControls(params) {
+    console.log(params);
+    const {changeIframe} = params;
     const [structure, setStructure] = React.useState([]);
+    const [report, setReport] = React.useState();
     const testRequestGet = async () => {
         const response: Response = await fetch('/api/test_get', {
             method: 'GET',
@@ -25,6 +29,22 @@ export default function ButtonControls() {
 
         // console.log('Get Result', await response.json());
         return await response.json();
+    }
+
+    const showReport = async () => {
+        const response: Response = await fetch('/api/show_report', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        })
+        // @ts-ignore
+        await setReport(response);
+        const responseResult = await response;
+        changeIframe(responseResult)
+        console.log(responseResult)
+        // return await response.json();
     }
 
     const getStructureTest = () => {
@@ -63,8 +83,8 @@ export default function ButtonControls() {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
-            case 'Spa Structur':  // if (x === 'value1')
-                return (<ListItem button key={text} onClick={getStructure}>
+            case 'Show Report':  // if (x === 'value1')
+                return (<ListItem button key={text} onClick={showReport}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                              fill="#000000">
@@ -79,7 +99,7 @@ export default function ButtonControls() {
     }
     return (
         <List>
-            {['Start testing', 'Get Structur', 'Spa Structur'].map((text, index) => (
+            {['Start testing', 'Get Structur', 'Show Report'].map((text, index) => (
                 <ListItem button key={text}>
                     {changeButton(text)}
                 </ListItem>

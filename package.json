@@ -11,7 +11,8 @@
   "scripts": {
     "test": "jest",
     "testUI": "npm run dev --prefix ./server/",
-    "test.watch": "jest --watchAll"
+    "test.watch": "jest --watchAll",
+    "showReporter": "npx serve jest_html_reporters.html"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",

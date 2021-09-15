@@ -79,6 +79,14 @@ const useStyles = makeStyles((theme: Theme) =>
             flexGrow: 1,
             padding: theme.spacing(3),
         },
+        viewContent: {
+            display: 'flex',
+            flexDirection: 'column',
+            width: '100%',
+        },
+        iFrame: {
+         height:'75vh'
+        },
     }),
 );
 
@@ -90,6 +98,7 @@ function StartTestButton() {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
+    const [report, setReport] = React.useState();
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -98,6 +107,10 @@ function StartTestButton() {
     const handleDrawerClose = () => {
         setOpen(false);
     };
+
+    const changeIframe = (result: any) =>[
+        setReport(result.url)
+    ]
 
     return (
         <div className={classes.root}>
@@ -153,9 +166,12 @@ function StartTestButton() {
                     </IconButton>
                 </div>
                 <Divider/>
-                <ButtonControls/>
+                <ButtonControls changeIframe={changeIframe}/>
             </Drawer>
+            <div className={classes.viewContent}>
             <TestTable/>
+            <iframe className={classes.iFrame} src="http://localhost:5000/"></iframe>
+            </div>
         </div>
     )
 }
