@@ -138,7 +138,7 @@ function StartTestButton() {
                         </svg>
                     </IconButton>
                     <Typography variant="h6" noWrap>
-                        Autotest CI
+                        Test Runer CI
                     </Typography>
                 </Toolbar>
             </AppBar>
