@@ -28,6 +28,9 @@ app.get('/api/show_report', (req:Request, res:Response) => {
     res.send(path.join(__dirname, '../../', 'jest_html_reporters.html'));
 
 });
+app.get('/api/start_recorder', (req:Request, res:Response) => {
+    execSync('npm run recorder --prefix ../', {stdio:[0,1,2]});
+});
 app.get('/api/get_structure', (req:Request, res:Response) => {
     // startTest()
     console.log('test get  777');

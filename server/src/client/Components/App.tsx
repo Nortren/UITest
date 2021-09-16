@@ -170,7 +170,7 @@ function StartTestButton() {
             </Drawer>
             <div className={classes.viewContent}>
             <TestTable/>
-            <iframe className={classes.iFrame} src="http://localhost:5000/"></iframe>
+            <iframe id='IFrameReport' className={classes.iFrame} src="http://localhost:5000/"></iframe>
             </div>
         </div>
     )

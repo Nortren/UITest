@@ -13,7 +13,8 @@
     "test": "jest",
     "testUI": "npm run dev --prefix ./server/",
     "test.watch": "jest --watchAll",
-    "showReporter": "npx serve jest_html_reporters.html"
+    "showReporter": "npx serve jest_html_reporters.html",
+    "recorder": "npx playwright codegen"
   },
   "dependencies": {
     "@material-ui/core": "^4.12.3",

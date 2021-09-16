@@ -30,6 +30,15 @@ export default function ButtonControls(params) {
         // console.log('Get Result', await response.json());
         return await response.json();
     }
+    const startRecorder = async () => {
+        const response: Response = await fetch('/api/start_recorder', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+            },
+        })
+    }
 
     const showReport = async () => {
         const response: Response = await fetch('/api/show_report', {
@@ -95,11 +104,22 @@ export default function ButtonControls(params) {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
+            case 'Record':  // if (x === 'value1')
+                return (<ListItem button key={text} onClick={startRecorder}>
+                    <ListItemIcon>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                             fill="#000000">
+                            <path d="M24 24H0V0h24v24z" fill="none"/>
+                            <circle cx="12" cy="12" r="8"/>
+                        </svg>
+                    </ListItemIcon>
+                    <ListItemText primary={text}/>
+                </ListItem>)
         }
     }
     return (
         <List>
-            {['Start testing', 'Get Structur', 'Show Report'].map((text, index) => (
+            {['Start testing', 'Get Structur', 'Show Report', 'Record'].map((text, index) => (
                 <ListItem button key={text}>
                     {changeButton(text)}
                 </ListItem>
