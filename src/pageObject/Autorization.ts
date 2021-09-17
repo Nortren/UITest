@@ -9,8 +9,8 @@ export class Autorization {
         this.page = page;
     }
     async init() {
-        const USERNAME = ''
-        const PASSWORD = ''
+        const USERNAME = 'timofei.trunov+no-mtp@inten.to'
+        const PASSWORD = 'timofei.trunov+no-mtp@inten.to'
 
         await this.page.goto('https://portal-stage.inten.to/');
 
@@ -18,7 +18,8 @@ export class Autorization {
         await this.page.fill('input[id="login-email"]', USERNAME);
         await this.page.fill('input[id="login-password"]', PASSWORD);
         await this.page.click('button:has-text("Sign in")');
-
+        await this.page.waitForTimeout(3000);
+        await this.page.goto('https://portal-stage.inten.to/');
 
 
     }

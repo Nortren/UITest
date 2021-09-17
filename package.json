@@ -4,16 +4,24 @@
     "jest": "^27.1.0",
     "jest-html-reporters": "^2.1.6",
     "jest-playwright-preset": "^1.7.0",
+    "nativescript-dev-webpack": "^1.5.1",
     "playwright": "^1.14.1",
     "ts-jest": "^27.0.5",
     "typescript": "^4.4.2"
   },
   "scripts": {
     "test": "jest",
-    "test.watch": "jest --watchAll"
+    "testUI": "npm run dev --prefix ./server/",
+    "test.watch": "jest --watchAll",
+    "showReporter": "npx serve jest_html_reporters.html",
+    "recorder": "npx playwright codegen"
   },
   "dependencies": {
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@mui/x-data-grid": "^4.0.0",
     "@playwright/test": "^1.14.1",
+    "clsx": "^1.1.1",
     "pm2": "^5.1.1"
   }
 }
