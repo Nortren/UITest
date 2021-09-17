@@ -2,7 +2,7 @@
 // https://www.carlrippon.com/getting-started-with-playwright/
 // https://github.com/fractalliter/express-react-typescript
 // https://fonts.google.com/icons?selected=Material+Icons:keyboard
-const {MTPortalPage} = require('../src/pageObject/MTPortalPageObject')
+const {MTPortalPage} = require('../pageObject/MTPortalPageObject')
 
 const searchPage = new MTPortalPage(page);
 const inputTextArea = searchPage.inputTextArea();

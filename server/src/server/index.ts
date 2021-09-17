@@ -34,18 +34,26 @@ app.get('/api/start_recorder', (req:Request, res:Response) => {
 app.get('/api/get_structure', (req:Request, res:Response) => {
     // startTest()
     console.log('test get  777');
-    let currentDirectory = fs.readdirSync('../src', 'utf8');
-    const resultSearch = currentDirectory.filter((item:string) =>{
+    let developedTestsDirectory = fs.readdirSync('../src/developedTests', 'utf8');
+    const developedTests = developedTestsDirectory.filter((item:string) =>{
         if(item.indexOf('test') !== -1){
             return item
         }
     })
-    console.log(resultSearch);
-    res.send(resultSearch);
-});
 
-app.post('/api/test_post', (req:Request, res:Response) => {
-    console.log('test post');
+    let recordTestsDirectory = fs.readdirSync('../src/recordTest', 'utf8');
+    const recordTests = recordTestsDirectory.filter((item:string) =>{
+        if(item.indexOf('test') !== -1){
+            return item
+        }
+    })
+
+    res.send({developedTests,recordTests});
+});
+app.post('/api/write_test', function(request, response){
+    console.log(request.body.testName,request.body.testBody);      // your JSON
+    fs.writeFileSync(`../src/${request.body.testName}`,request.body.testBody);
+    response.send(request.body);    // echo the result back
 });
 // REGISTER ROUTES
 // all of the routes will be prefixed with /api

@@ -1,4 +1,4 @@
-const {MTPortalPage} = require('../src/pageObject/MTPortalPageObject')
+const {MTPortalPage} = require('../pageObject/MTPortalPageObject')
 
 const searchPage = new MTPortalPage(page);
 const inputTextArea = searchPage.inputTextArea();
