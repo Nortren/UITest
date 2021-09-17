@@ -14,6 +14,8 @@ import IconButton from '@material-ui/core/IconButton';
 import TestTable from './TestTable'
 
 import ButtonControls from './ButtonControls'
+import {FullScreenDialog} from "./FullScreenDialog";
+import ListItem from "@material-ui/core/ListItem";
 
 
 const drawerWidth = 240;
@@ -85,7 +87,8 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
         },
         iFrame: {
-         height:'75vh'
+            height: '75vh',
+            display: 'none',
         },
     }),
 );
@@ -108,7 +111,7 @@ function StartTestButton() {
         setOpen(false);
     };
 
-    const changeIframe = (result: any) =>[
+    const changeIframe = (result: any) => [
         setReport(result.url)
     ]
 
@@ -169,8 +172,8 @@ function StartTestButton() {
                 <ButtonControls changeIframe={changeIframe}/>
             </Drawer>
             <div className={classes.viewContent}>
-            <TestTable/>
-            <iframe id='IFrameReport' className={classes.iFrame} src="http://localhost:5000/"></iframe>
+                <TestTable/>
+                <iframe id='IFrameReport' className={classes.iFrame} src="http://localhost:5000/"></iframe>
             </div>
         </div>
     )

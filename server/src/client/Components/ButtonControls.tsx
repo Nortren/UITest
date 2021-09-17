@@ -2,7 +2,7 @@ import * as React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {ListItemIcon, ListItemText} from "@material-ui/core";
-
+import {FullScreenDialog} from './FullScreenDialog'
 // @ts-ignore
 export default function ButtonControls(params) {
     console.log(params);
@@ -51,7 +51,9 @@ export default function ButtonControls(params) {
         // @ts-ignore
         await setReport(response);
         const responseResult = await response;
-        changeIframe(responseResult)
+        changeIframe(responseResult);
+        //@ts-ignore
+        document.getElementById('IFrameReport').style.display = 'block'
         console.log(responseResult)
         // return await response.json();
     }
@@ -62,6 +64,15 @@ export default function ButtonControls(params) {
             console.log(structure);
         })
 
+    };
+    //@ts-ignore
+    const closeFileEditor = () => {
+        setOpen(false);
+    };
+
+    const [open, setOpen] = React.useState(false);
+    const openFileEditor = () => {
+        setOpen(true);
     };
 
     const changeButton = (text: string) => {
@@ -115,11 +126,24 @@ export default function ButtonControls(params) {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
+            case 'Save':  // if (x === 'value1')
+                return (<ListItem button key={text} onClick={openFileEditor}>
+                    <ListItemIcon>
+                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
+                             fill="#000000">
+                            <path d="M0 0h24v24H0z" fill="none"/>
+                            <path
+                                d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm-5 16c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3zm3-10H5V5h10v4z"/>
+                        </svg>
+                    </ListItemIcon>
+                    <ListItemText primary={text}/>
+                </ListItem>)
         }
     }
     return (
         <List>
-            {['Start testing', 'Get Structur', 'Show Report', 'Record'].map((text, index) => (
+            <FullScreenDialog closeFileEditor={closeFileEditor} openFileEditor={openFileEditor} open={open}/>
+            {['Start testing', 'Record', 'Save', 'Get Structur', 'Show Report'].map((text, index) => (
                 <ListItem button key={text}>
                     {changeButton(text)}
                 </ListItem>
