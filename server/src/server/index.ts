@@ -31,8 +31,15 @@ app.get('/api/show_report', (req:Request, res:Response) => {
 app.get('/api/start_recorder', (req:Request, res:Response) => {
     execSync('npm run recorder --prefix ../', {stdio:[0,1,2]});
 });
+
+app.get('/api/get_settings_test', (req:Request, res:Response) => {
+
+    let settingTestConfig = fs.readFileSync('../settingTest.json', 'utf8');
+    settingTestConfig = JSON.stringify(settingTestConfig);
+    res.send(settingTestConfig);
+});
+
 app.get('/api/get_structure', (req:Request, res:Response) => {
-    // startTest()
     console.log('test get  777');
     let developedTestsDirectory = fs.readdirSync('../src/developedTests', 'utf8');
     const developedTests = developedTestsDirectory.filter((item:string) =>{
@@ -55,12 +62,12 @@ app.post('/api/write_test', function(request, response){
     fs.writeFileSync(`../src/${request.body.testName}`,request.body.testBody);
     response.send(request.body);    // echo the result back
 });
-// REGISTER ROUTES
-// all of the routes will be prefixed with /api
-// const routes: Router[] = Object.values(router);
-// app.use('/api', routes);
 
-// START THE SERVER
-// =============================================================================
+app.post('/api/save_settings_test', function(request, response){
+    console.log(request.body);
+    fs.writeFileSync('../settingTest.json',JSON.stringify(request.body));
+    response.send(true);
+});
+
 app.listen(port);
 console.log(`App listening on ${port}`);
