@@ -14,7 +14,7 @@ const selectProvider = searchPage.selectProvider();
 it("Checking the authorization", async () => {
     searchPage.initPage();
     await page.waitForTimeout(7000);
-}, 70000);
+}, 90000);
 
 
 it("Checking the transfer", async () => {

@@ -10,6 +10,7 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import {useEffect} from "react";
+import {SaveButton} from "./SaveButton";
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     '& .MuDialogContent-root': {
@@ -137,7 +138,7 @@ export function SettingsDialog(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button autoFocus onClick={saveSettings}>
-                        Save changes
+                        <SaveButton type='textButton'/>
                     </Button>
                 </DialogActions>
             </BootstrapDialog>

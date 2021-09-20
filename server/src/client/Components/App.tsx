@@ -14,9 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TestTable from './TestTable'
 
 import ButtonControls from './ButtonControls'
-import {FullScreenDialog} from "./FullScreenDialog";
-import ListItem from "@material-ui/core/ListItem";
-
+import {useEffect} from "react";
 
 const drawerWidth = 240;
 
@@ -87,7 +85,7 @@ const useStyles = makeStyles((theme: Theme) =>
             width: '100%',
         },
         iFrame: {
-            height: '75vh',
+            height: '100vh',
             display: 'none',
         },
     }),
@@ -97,11 +95,35 @@ export default function App() {
     return <StartTestButton/>
 }
 
+
 function StartTestButton() {
     const classes = useStyles();
 
     const [open, setOpen] = React.useState(false);
     const [report, setReport] = React.useState();
+    const [page, setPage] = React.useState('testView');
+
+
+    const changeView = (page:string) => {
+        setPage(page);
+    }
+
+    const switchingView = () => {
+
+        switch (page){
+            case 'testView':
+                return  <TestTable/>
+            case 'report':
+                return    (<iframe id='IFrameReport' className={classes.iFrame} src="http://localhost:5000/" onLoad={() => {
+                    //@ts-ignore
+                    window.addEventListener("message", () => {
+                        //@ts-ignore
+                        this.contentWindow.location.reload()
+                    });
+                }}></iframe>)
+        }
+
+    }
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -169,11 +191,10 @@ function StartTestButton() {
                     </IconButton>
                 </div>
                 <Divider/>
-                <ButtonControls changeIframe={changeIframe}/>
+                <ButtonControls changeIframe={changeIframe} changeView={changeView}/>
             </Drawer>
             <div className={classes.viewContent}>
-                <TestTable/>
-                <iframe id='IFrameReport' className={classes.iFrame} src="http://localhost:5000/"></iframe>
+                {switchingView()}
             </div>
         </div>
     )

@@ -4,20 +4,39 @@ import ListItem from '@material-ui/core/ListItem';
 import {ListItemIcon, ListItemText} from "@material-ui/core";
 import {FullScreenDialog} from './FullScreenDialog'
 import {SettingsDialog} from './SettingsDialog'
+import {LoaderWindows} from "./LoaderWindows";
 // @ts-ignore
 export default function ButtonControls(params) {
     console.log(params);
-    const {changeIframe} = params;
+    const {changeIframe, changeView} = params;
     const [structure, setStructure] = React.useState([]);
     const [report, setReport] = React.useState();
-    const testRequestGet = async () => {
-        const response: Response = await fetch('/api/test_get', {
+
+    const [open, setOpen] = React.useState(false);
+    const [openSettings, setOpenSettings] = React.useState(false);
+    const [openLoader, setOpenLoader] = React.useState(false);
+
+    const startTesting = async () => {
+        document.dispatchEvent(new CustomEvent("StartTest", {
+            detail: {status: "start"}
+        }));
+        changeView('testView');
+        const response: Response = await fetch('/api/start_test', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Accept': 'application/json',
             },
         });
+        const responseResult = await response;
+        changeIframe(responseResult);
+        responseResult.json().then((res)=>{
+            if(res.finish){
+                document.dispatchEvent(new CustomEvent("StartTest", {
+                    detail: { status: "finish" }
+                }));
+            }
+        })
     }
     const getStructure = async () => {
         const response: Response = await fetch('/api/get_structure', {
@@ -27,11 +46,10 @@ export default function ButtonControls(params) {
                 'Accept': 'application/json',
             },
         })
-
-        // console.log('Get Result', await response.json());
         return await response.json();
     }
     const startRecorder = async () => {
+        openLoaderWindow();
         const response: Response = await fetch('/api/start_recorder', {
             method: 'GET',
             headers: {
@@ -39,9 +57,17 @@ export default function ButtonControls(params) {
                 'Accept': 'application/json',
             },
         })
+        const responseResult = await response;
+        responseResult.json().then((res)=>{
+            if(res.finish){
+                setOpenLoader(false);
+            }
+        })
     }
 
     const showReport = async () => {
+        changeView('report');
+
         const response: Response = await fetch('/api/show_report', {
             method: 'GET',
             headers: {
@@ -60,6 +86,7 @@ export default function ButtonControls(params) {
     }
 
     const getStructureTest = () => {
+        changeView('testView');
         getStructure().then((result) => {
             setStructure(result);
             console.log(structure);
@@ -71,8 +98,7 @@ export default function ButtonControls(params) {
         setOpen(false);
     };
 
-    const [open, setOpen] = React.useState(false);
-    const [openSettings, setOpenSettings] = React.useState(false);
+
     const openFileEditor = () => {
         setOpen(true);
     };
@@ -84,12 +110,19 @@ export default function ButtonControls(params) {
     const closeSetting = () => {
         setOpenSettings(false);
     };
+    const closeLoaderWindow = () => {
+        setOpenLoader(false);
+    };
+
+    const openLoaderWindow = () => {
+        setOpenLoader(true);
+    };
 
     const changeButton = (text: string) => {
         switch (text) {
             case 'Start testing':  // if (x === 'value1')
                 return (
-                    <ListItem button key={text} onClick={testRequestGet}>
+                    <ListItem button key={text} onClick={startTesting}>
                         <ListItemIcon>
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
                                  fill="#000000">
@@ -168,7 +201,8 @@ export default function ButtonControls(params) {
         <List>
             <FullScreenDialog closeFileEditor={closeFileEditor} openFileEditor={openFileEditor} open={open}/>
             <SettingsDialog closeSetting={closeSetting} openSetting={openSetting} open={openSettings}/>
-            {['Start testing', 'Record', 'Save', 'Get Structur', 'Show Report','Settings'].map((text, index) => (
+            <LoaderWindows closeSetting={closeLoaderWindow} openSetting={openLoaderWindow} open={openLoader}/>
+            {['Start testing', 'Record', 'Save', 'Get Structur', 'Show Report', 'Settings'].map((text, index) => (
                 <ListItem button key={text}>
                     {changeButton(text)}
                 </ListItem>

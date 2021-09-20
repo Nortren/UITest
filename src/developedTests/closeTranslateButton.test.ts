@@ -10,7 +10,7 @@ const selectProvider = searchPage.selectProvider();
 it("Checking the authorization", async () => {
     searchPage.initPage();
     await page.waitForTimeout(7000);
-}, 70000);
+}, 90000);
 // TODO тест отрабатывает с ошибкой т.к в консоль портала посе нажатия кнопки "Cancel Translate" падает ошибка
 it("checking cancel translate", async () => {
     await selectLanguageFrom.changeLanguage('English');
