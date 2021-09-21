@@ -14,7 +14,7 @@ import IconButton from '@material-ui/core/IconButton';
 import TestTable from './TestTable'
 
 import ButtonControls from './ButtonControls'
-import {useEffect} from "react";
+import {APItestDialog} from './APITestDialog'
 
 const drawerWidth = 240;
 
@@ -24,6 +24,7 @@ const useStyles = makeStyles((theme: Theme) =>
             display: 'flex',
         },
         appBar: {
+            background: '#1565c0',
             zIndex: theme.zIndex.drawer + 1,
             transition: theme.transitions.create(['width', 'margin'], {
                 easing: theme.transitions.easing.sharp,
@@ -194,7 +195,8 @@ function StartTestButton() {
                 <ButtonControls changeIframe={changeIframe} changeView={changeView}/>
             </Drawer>
             <div className={classes.viewContent}>
-                {switchingView()}
+                {/*{switchingView()}*/}
+                <APItestDialog open={true}/>
             </div>
         </div>
     )

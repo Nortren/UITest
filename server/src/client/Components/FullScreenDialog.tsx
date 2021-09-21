@@ -14,6 +14,7 @@ import {TransitionProps} from '@mui/material/transitions';
 import {TextField} from "@mui/material";
 import Drawer from "@material-ui/core/Drawer";
 import {SaveButton} from "./SaveButton";
+import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -24,8 +25,24 @@ const Transition = React.forwardRef(function Transition(
     return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const useStyles = makeStyles((theme: Theme) =>
+    createStyles({
+            appBar: {
+                background: '#1565c0',
+            },
+            codeField: {
+                marginTop: '30px !important',
+            },
+        }
+    )
+)
+
+
 //@ts-ignore
 export function FullScreenDialog(props) {
+
+    const classes = useStyles();
+
     const handleClose = () => {
         props.closeFileEditor()
     };
@@ -67,7 +84,7 @@ export function FullScreenDialog(props) {
                 onClose={handleClose}
                 TransitionComponent={Transition}
             >
-                <AppBar sx={{position: 'relative'}}>
+                <AppBar sx={{position: 'relative'}} className={classes.appBar}>
                     <Toolbar>
                         <IconButton
                             edge="start"
@@ -97,8 +114,8 @@ export function FullScreenDialog(props) {
                 </AppBar>
                 <List>
                     <TextField fullWidth label="Test Name" id="fullWidth" onChange={changeTestName}/>
-                    <Divider/>
-                    <TextField fullWidth rows={16} multiline label="Test Code" id="fullWidth"
+
+                    <TextField className={classes.codeField} fullWidth rows={16} multiline label="Test Code" id="fullWidth"
                                onChange={changeTestBody}/>
                 </List>
             </Dialog>

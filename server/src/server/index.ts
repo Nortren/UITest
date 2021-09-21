@@ -66,8 +66,6 @@ app.get('/api/get_structure', (req: Request, res: Response) => {
         }
     })
 
-    // console.log('Test123',developedTestsDirectory);
-
     res.send({developedTests, recordTests});
 });
 app.post('/api/write_test', function (request, response) {
@@ -77,12 +75,54 @@ app.post('/api/write_test', function (request, response) {
     });
 });
 
+app.post('/api/write_api_test', function (request, response) {
+    console.log(request.body.testName, request.body.testBody);      // your JSON
+    fs.writeFile(`../src/api_test/${request.body.testName}`, request.body.testBody, () => {
+        response.send(true);
+    });
+});
+
+app.post('/api/write_api_request', function (request, response) {
+    fs.writeFile(`../src/api_request/${request.body.requestName}`, JSON.stringify(request.body), () => {
+        console.log('test')
+        response.send(true);
+    });
+});
+app.post('/api/delete_api_request', function (request, response) {
+    //@ts-ignore
+    fs.unlink(`../src/api_request/${request.body.requestName}`, (err) => {
+        if (err) {
+            console.log(err);
+        } else {
+            response.send(true);
+            console.log("Файл удалён");
+        }
+    });
+});
+
 app.post('/api/save_settings_test', function (request, response) {
     console.log(request.body);
     fs.writeFile('../settingTest.json', JSON.stringify(request.body), () => {
         response.send(true);
     });
 
+});
+
+app.post('/api/load_api_request_data', function (request, response) {
+    //@ts-ignore
+    console.log(request.body)
+    //@ts-ignore
+    let developedTestsDirectory = fs.readFileSync(`../src/api_request/${request.body.apiTestName}`, 'utf8');
+    console.log(developedTestsDirectory)
+    response.send(developedTestsDirectory);
+});
+
+app.get('/api/get_request_structure', (req: Request, res: Response) => {
+    let requestDirectory = fs.readdirSync('../src/api_request', 'utf8');
+    const requestAPI = requestDirectory.filter((item: string) => {
+            return item
+    })
+    res.send({requestAPI});
 });
 
 app.listen(port);
