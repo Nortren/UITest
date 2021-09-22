@@ -195,8 +195,7 @@ function StartTestButton() {
                 <ButtonControls changeIframe={changeIframe} changeView={changeView}/>
             </Drawer>
             <div className={classes.viewContent}>
-                {/*{switchingView()}*/}
-                <APItestDialog open={true}/>
+                {switchingView()}
             </div>
         </div>
     )

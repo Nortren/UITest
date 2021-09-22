@@ -1,1 +1,1 @@
-{"apiTestName":"testApi.json"}
+{"headless":true,"browserSettings":{"chromium":true,"firefox":true,"webkit":false}}

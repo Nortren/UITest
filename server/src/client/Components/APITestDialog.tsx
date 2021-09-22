@@ -104,7 +104,7 @@ export function APItestDialog(props) {
     const classes = useStyles();
 
     const handleClose = () => {
-        props.closeFileEditor()
+        props.closeAPIEditor()
     };
 
     const [testName, setTestName] = React.useState('');
