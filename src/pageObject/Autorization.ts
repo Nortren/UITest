@@ -14,7 +14,7 @@ export class Autorization {
 
         await this.page.goto('https://portal-stage.inten.to/');
 
-        await this.page.click('text=Sign in instead');
+        await this.page.click('text=Sign in');
         await this.page.fill('input[id="login-email"]', USERNAME);
         await this.page.fill('input[id="login-password"]', PASSWORD);
         await this.page.click('button:has-text("Sign in")');
