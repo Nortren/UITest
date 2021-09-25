@@ -12,6 +12,17 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
 
 import {useEffect} from "react";
+import {object} from "@sinonjs/commons/types/prototypes";
+
+enum Options {
+    apiTests = 'apiTests',
+    developerTests = 'developerTests',
+    recordTests = 'recordTests',
+}
+
+type  IStructure  = {
+    [apiTests in Options]?: string[];
+}
 
 const useStyles = makeStyles(() =>
     createStyles({
@@ -42,7 +53,7 @@ const getStructure = async () => {
 export default function TestTable() {
     const classes = useStyles();
     const [initStatus, setInitStatus] = React.useState(false);
-    const [structure, setStructure] = React.useState([]);
+    const [structure, setStructure] = React.useState<IStructure>({});
     const [showLoader, setShowLoader] = React.useState('expectation');
 
     const getStructureTest = () => {
@@ -55,22 +66,18 @@ export default function TestTable() {
         document.addEventListener("SaveTest", function (event) {
             init();
         });
-        document.addEventListener("StartTest", function (event) {
-            //@ts-ignore
+        document.addEventListener("StartTest", function (event:CustomEventInit) {
             if(event.detail.status === 'start'){
                 setShowLoader('start');
-                //@ts-ignore
             } else if(event.detail.status === 'finish'){
                 setShowLoader('finish');
             }
-
         });
         init();
     }, []);
 
-    function createData(name: string) {
-        //@ts-ignore
-        const res = structure?.[name]?.map((item) => {
+    function createData(name: Options) {
+        const res = structure?.[name]?.map((item: string) => {
             return {name: item, status: 'success', "date last run": '09-09-2021', "test count": 24}
         })
         return res;
@@ -83,8 +90,9 @@ export default function TestTable() {
         }
     }
 
-    const rowsDevelopmentTest = createData('developedTests')
-    const rowsRecordTest = createData('recordTests')
+    const rowsDevelopmentTest = createData(Options.developerTests)
+    const rowsRecordTest = createData(Options.recordTests)
+    const rowsAPITest = createData(Options.apiTests)
     return (
         <TableContainer component={Paper}>
             <Table className={classes.table} aria-label="simple table">
@@ -99,7 +107,7 @@ export default function TestTable() {
 
                 <TableBody>
 
-                    {  //@ts-ignore
+                    {
                         rowsDevelopmentTest?.map((row) => (
                             <TableRow key={row.name}>
                                 <TableCell scope="row">
@@ -114,7 +122,7 @@ export default function TestTable() {
                                 <TableCell align="right">{row['test count']}</TableCell>
                             </TableRow>
                         ))}
-                    {  //@ts-ignore
+                    {
                         rowsRecordTest?.map((row) => (
                             <TableRow key={row.name}>
 
@@ -131,34 +139,26 @@ export default function TestTable() {
 
                             </TableRow>
                         ))}
+                    {
+                        rowsAPITest?.map((row) => (
+                            <TableRow key={row.name}>
 
+                                <TableCell scope="row">
+                                    {row.name}
+                                </TableCell>
+                                <TableCell align="right">{showLoader}
+                                    {showLoader === 'start' ? <Box sx={{width: '100%'}}>
+                                        <LinearProgress color="inherit"/>
+                                    </Box> : ''}
+                                </TableCell>
+                                <TableCell align="right">api test</TableCell>
+                                <TableCell align="right">{row['test count']}</TableCell>
+
+                            </TableRow>
+                        ))}
                 </TableBody>
-
             </Table>
             <Divider/>
-            {/*<Table className={classes.tableSeparator} aria-label="simple table">*/}
-            {/*    <TableHead>*/}
-            {/*        <TableRow>*/}
-            {/*            <TableCell>Name Record Test</TableCell>*/}
-            {/*            <TableCell align="right">Status</TableCell>*/}
-            {/*            <TableCell align="right">Date last run</TableCell>*/}
-            {/*            <TableCell align="right">Test count</TableCell>*/}
-            {/*        </TableRow>*/}
-            {/*    </TableHead>*/}
-            {/*    <TableBody >*/}
-            {/*        {  //@ts-ignore*/}
-            {/*            rowsRecordTest?.map((row) => (*/}
-            {/*                <TableRow key={row.name}>*/}
-            {/*                    <TableCell scope="row">*/}
-            {/*                        {row.name}*/}
-            {/*                    </TableCell>*/}
-            {/*                    <TableCell align="right">{row.status}</TableCell>*/}
-            {/*                    <TableCell align="right">{row['date last run']}</TableCell>*/}
-            {/*                    <TableCell align="right">{row['test count']}</TableCell>*/}
-            {/*                </TableRow>*/}
-            {/*            ))}*/}
-            {/*    </TableBody>*/}
-            {/*</Table>*/}
         </TableContainer>
     )
 }
