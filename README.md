@@ -8,6 +8,7 @@ ___
 npm install
 cd server
 npm install
+cd ..
 npm run testUI
 ___
 ### Test launch system:
