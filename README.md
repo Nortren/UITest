@@ -8,6 +8,7 @@ ___
 npm install
 cd server
 npm install
+npm run testUI
 ___
 ### Test launch system:
 -Tests can be as previously recorded by programmers (development test);
