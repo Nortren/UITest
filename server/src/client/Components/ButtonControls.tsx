@@ -2,16 +2,37 @@ import * as React from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import {ListItemIcon, ListItemText} from "@material-ui/core";
-import {FullScreenDialog} from './FullScreenDialog'
+import {TestEditor} from './TestEditor'
 import {SettingsDialog} from './SettingsDialog'
 import {LoaderWindows} from "./LoaderWindows";
-import {APItestDialog} from "./APITestDialog";
-// @ts-ignore
-export default function ButtonControls(params) {
+import {APITestDialog} from "./APITestDialog";
+
+interface IResponseReport {
+    body: object | null,
+    bodyUsed: boolean,
+    headers: object | null,
+    ok: boolean,
+    redirected: boolean,
+    status: number,
+    statusText: string
+    type: string
+    url: string
+}
+interface IParams {
+    changeIframe: (result: any)=>void,
+    changeView: (page:string)=>void,
+}
+
+/**
+ * A set of control buttons for the side menu application
+ * @param params
+ * @constructor
+ */
+export default function ButtonControls(params: IParams) {
     console.log(params);
     const {changeIframe, changeView} = params;
     const [structure, setStructure] = React.useState([]);
-    const [report, setReport] = React.useState();
+    const [report, setReport] = React.useState<IResponseReport | null>(null);
 
     const [open, setOpen] = React.useState(false);
     const [openApi, setOpenApi] = React.useState(false);
@@ -77,14 +98,13 @@ export default function ButtonControls(params) {
                 'Accept': 'application/json',
             },
         })
-        // @ts-ignore
         await setReport(response);
         const responseResult = await response;
         changeIframe(responseResult);
-        //@ts-ignore
-        document.getElementById('IFrameReport').style.display = 'block'
-        console.log(responseResult)
-        // return await response.json();
+        const iFrameReport = document.getElementById('IFrameReport');
+        if (iFrameReport) {
+            iFrameReport.style.display = 'block'
+        }
     }
 
     const getStructureTest = () => {
@@ -95,7 +115,7 @@ export default function ButtonControls(params) {
         })
 
     };
-    //@ts-ignore
+
     const closeFileEditor = () => {
         setOpen(false);
     };
@@ -143,8 +163,7 @@ export default function ButtonControls(params) {
                         <ListItemText primary={text}/>
                     </ListItem>
                 )
-            case 'Get Structur':  // if (x === 'value1')
-                //@ts-ignore
+            case 'Get Structur':
                 return (<ListItem button key={text} onClick={getStructureTest}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
@@ -156,7 +175,7 @@ export default function ButtonControls(params) {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
-            case 'Show Report':  // if (x === 'value1')
+            case 'Show Report':
                 return (<ListItem button key={text} onClick={showReport}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
@@ -168,7 +187,7 @@ export default function ButtonControls(params) {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
-            case 'Record':  // if (x === 'value1')
+            case 'Record':
                 return (<ListItem button key={text} onClick={startRecorder}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
@@ -179,7 +198,7 @@ export default function ButtonControls(params) {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
-            case 'Save':  // if (x === 'value1')
+            case 'Save':
                 return (<ListItem button key={text} onClick={openFileEditor}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"
@@ -191,7 +210,7 @@ export default function ButtonControls(params) {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
-            case 'Settings':  // if (x === 'value1')
+            case 'Settings':
                 return (<ListItem button key={text} onClick={openSetting}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 24 24" height="24px"
@@ -205,7 +224,7 @@ export default function ButtonControls(params) {
                     </ListItemIcon>
                     <ListItemText primary={text}/>
                 </ListItem>)
-            case 'Api Test':  // if (x === 'value1')
+            case 'Api Test':
                 return (<ListItem button key={text} onClick={openApiEditor}>
                     <ListItemIcon>
                         <svg xmlns="http://www.w3.org/2000/svg" enable-background="new 0 0 24 24" height="24px"
@@ -223,8 +242,8 @@ export default function ButtonControls(params) {
     }
     return (
         <List>
-            <FullScreenDialog closeFileEditor={closeFileEditor} openFileEditor={openFileEditor} open={open}/>
-            <APItestDialog closeAPIEditor={closeApiEditor} openAPIEditor={openApiEditor} open={openApi}/>
+            <TestEditor closeFileEditor={closeFileEditor} openFileEditor={openFileEditor} open={open}/>
+            <APITestDialog closeAPIEditor={closeApiEditor} openAPIEditor={openApiEditor} open={openApi}/>
             <SettingsDialog closeSetting={closeSetting} openSetting={openSetting} open={openSettings}/>
             <LoaderWindows closeSetting={closeLoaderWindow} openSetting={openLoaderWindow} open={openLoader}/>
             {['Start testing', 'Record', 'Save', 'Get Structur', 'Show Report', 'Settings', 'Api Test'].map((text, index) => (

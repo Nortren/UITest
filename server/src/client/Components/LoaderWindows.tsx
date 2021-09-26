@@ -6,18 +6,18 @@ import {useEffect} from "react";
 import Backdrop from '@mui/material/Backdrop';
 import Typography from '@mui/material/Typography';
 
-export interface DialogTitleProps {
-    id: string;
-    children?: React.ReactNode;
-    onClose: () => void;
+export interface ILoaderWindows {
+    open: boolean;
+    closeSetting: () => void;
+    openSetting: () => void;
 }
 
-//@ts-ignore
-export function LoaderWindows(props) {
-    const handleClose = () => {
-        props.closeSetting()
-    };
-
+/**
+ * Loader test logger displaying the operation test record
+ * @param props
+ * @constructor
+ */
+export function LoaderWindows(props:ILoaderWindows) {
 
     const [settingsTest, setSettingsTest] = React.useState({});
     const initSettings = async () => {
@@ -28,36 +28,9 @@ export function LoaderWindows(props) {
                 'Accept': 'application/json',
             },
         })
-        //@ts-ignore
         response.json().then((result) => {
             setSettingsTest(JSON.parse(result));
         })
-
-    }
-    const saveSettings = async () => {
-        const response: Response = await fetch('/api/save_settings_test', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Accept': 'application/json',
-            },
-            body: JSON.stringify(settingsTest)
-        })
-        // @ts-ignore
-        await response.json().then((result) => {
-            console.log(result);
-        })
-    };
-    //@ts-ignore
-    const changeSettingStatus = (settingsItem, status, browderSettings?: boolean) => {
-        //@ts-ignore
-        if (browderSettings) {
-            //@ts-ignore
-            settingsTest['browserSettings'][settingsItem] = status
-        } else {
-            //@ts-ignore
-            settingsTest[settingsItem] = status
-        }
 
     }
 

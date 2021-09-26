@@ -77,7 +77,7 @@ app.get('/api/get_structure', (req: Request, res: Response) => {
  * Method for writing the text received from the record to a file in the record_test directory
  */
 app.post('/api/write_test', function (request, response) {
-    fs.writeFile(`../src/recordTest/${request.body.testName}`, request.body.testBody, () => {
+    fs.writeFile(`../src/record_test/${request.body.testName}`, request.body.testBody, () => {
         response.send(true);
     });
 });

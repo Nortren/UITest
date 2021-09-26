@@ -2,19 +2,14 @@ import * as React from 'react';
 import clsx from 'clsx';
 import {makeStyles, Theme, createStyles} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
-
 import Toolbar from '@material-ui/core/Toolbar';
-
 import Typography from '@material-ui/core/Typography';
 import Divider from '@material-ui/core/Divider';
 import IconButton from '@material-ui/core/IconButton';
 import TestTable from './TestTable'
-
 import ButtonControls from './ButtonControls'
-import {APItestDialog} from './APITestDialog'
 
 const drawerWidth = 240;
 
@@ -73,7 +68,6 @@ const useStyles = makeStyles((theme: Theme) =>
             alignItems: 'center',
             justifyContent: 'flex-end',
             padding: theme.spacing(0, 1),
-            // necessary for content to be below app bar
             ...theme.mixins.toolbar,
         },
         content: {
@@ -91,11 +85,13 @@ const useStyles = makeStyles((theme: Theme) =>
         },
     }),
 );
-
+/**
+ * The main component of the main page
+ * @constructor
+ */
 export default function App() {
     return <StartTestButton/>
 }
-
 
 function StartTestButton() {
     const classes = useStyles();
@@ -115,13 +111,7 @@ function StartTestButton() {
             case 'testView':
                 return  <TestTable/>
             case 'report':
-                return    (<iframe id='IFrameReport' className={classes.iFrame} src="http://localhost:5000/" onLoad={() => {
-                    //@ts-ignore
-                    window.addEventListener("message", () => {
-                        //@ts-ignore
-                        this.contentWindow.location.reload()
-                    });
-                }}></iframe>)
+                return    (<iframe id='IFrameReport' className={classes.iFrame} src="http://localhost:5000/" ></iframe>)
         }
 
     }

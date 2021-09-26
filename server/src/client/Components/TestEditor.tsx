@@ -15,6 +15,7 @@ import {TextField} from "@mui/material";
 import Drawer from "@material-ui/core/Drawer";
 import {SaveButton} from "./SaveButton";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
+import {BaseSyntheticEvent, SyntheticEvent} from "react";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -37,25 +38,31 @@ const useStyles = makeStyles((theme: Theme) =>
     )
 )
 
+export interface ITestEditor {
+    open: boolean;
+    closeFileEditor: () => void;
+    openFileEditor: () => void;
+}
 
-//@ts-ignore
-export function FullScreenDialog(props) {
-
+/**
+ * UI Test Editor
+ * @param props
+ * @constructor
+ */
+export function TestEditor(props:ITestEditor) {
     const classes = useStyles();
+    const [testName, setTestName] = React.useState('');
+    const [testBody, setTestBody] = React.useState('');
 
     const handleClose = () => {
         props.closeFileEditor()
     };
 
-    const [testName, setTestName] = React.useState('');
-    const [testBody, setTestBody] = React.useState('');
-
-    //@ts-ignore
-    const changeTestName = async (event) => {
+    const changeTestName = async (event:BaseSyntheticEvent) => {
         setTestName(event.target.value);
     }
-    //@ts-ignore
-    const changeTestBody = async (event) => {
+
+    const changeTestBody = async (event:BaseSyntheticEvent) => {
         setTestBody(event.target.value);
     }
     const saveTest = async () => {
@@ -69,12 +76,10 @@ export function FullScreenDialog(props) {
         })
         let event = new Event("SaveTest");
         document.dispatchEvent(event);
-        // @ts-ignore
         await response.json().then((result) => {
             console.log(result);
         })
     }
-
 
     return (
         <div>

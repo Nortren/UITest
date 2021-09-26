@@ -10,9 +10,7 @@ import Paper from '@material-ui/core/Paper';
 import Divider from "@mui/material/Divider";
 import LinearProgress from '@mui/material/LinearProgress';
 import Box from '@mui/material/Box';
-
 import {useEffect} from "react";
-import {object} from "@sinonjs/commons/types/prototypes";
 
 enum Options {
     apiTests = 'apiTests',
@@ -50,6 +48,10 @@ const getStructure = async () => {
     return await response.json();
 }
 
+/**
+ * Component for displaying all test scenarios on the user's machine
+ * @constructor
+ */
 export default function TestTable() {
     const classes = useStyles();
     const [initStatus, setInitStatus] = React.useState(false);

@@ -4,11 +4,17 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { green } from '@mui/material/colors';
 import Button from '@mui/material/Button';
 import Fab from '@mui/material/Fab';
-// import CheckIcon from '@mui/icons-material/Check';
-// import SaveIcon from '@mui/icons-material/Save';
 
-// @ts-ignore
-export function SaveButton(props) {
+interface IProps {
+    type:string
+}
+
+/**
+ * The save button component
+ * @param props
+ * @constructor
+ */
+export function SaveButton(props:IProps) {
     const [loading, setLoading] = React.useState(false);
     const [success, setSuccess] = React.useState(false);
     const timer = React.useRef<number>();

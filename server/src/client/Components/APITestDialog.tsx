@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import ListItemText from '@mui/material/ListItemText';
 import ListItem from '@mui/material/ListItem';
@@ -12,16 +11,12 @@ import Typography from '@mui/material/Typography';
 import Slide from '@mui/material/Slide';
 import {TransitionProps} from '@mui/material/transitions';
 import {TextField} from "@mui/material";
-import Drawer from "@material-ui/core/Drawer";
 import {SaveButton} from "./SaveButton";
 import {createStyles, makeStyles, Theme} from "@material-ui/core/styles";
-import {DataGridPro} from '@mui/x-data-grid-pro';
-import {GridData, useDemoData} from '@mui/x-data-grid-generator';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import InputBase from '@mui/material/InputBase';
-import FormHelperText from '@mui/material/FormHelperText';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
@@ -33,9 +28,18 @@ import Tab from '@mui/material/Tab';
 import TabContext from '@mui/lab/TabContext';
 import TabList from '@mui/lab/TabList';
 import TabPanel from '@mui/lab/TabPanel';
+import {BaseSyntheticEvent, useEffect} from "react";
 
 
-import {useEffect} from "react";
+enum Options {
+    apiTests = 'apiTests',
+    developerTests = 'developerTests',
+    recordTests = 'recordTests',
+}
+
+type  IStructure  = {
+    [requestAPI in Options]?: string[];
+}
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -61,10 +65,19 @@ const useStyles = makeStyles((theme: Theme) =>
     )
 )
 
+export interface IAPITestDialog {
+    open: boolean;
+    closeAPIEditor: () => void;
+    openAPIEditor: () => void;
+}
 
-//@ts-ignore
-export function APItestDialog(props) {
-    const [structure, setStructure] = React.useState([]);
+/**
+ * The component responsible for displaying the api request editor
+ * @param props
+ * @constructor
+ */
+export function APITestDialog(props:IAPITestDialog) {
+    const [structure, setStructure] = React.useState<IStructure>({});
     const [initStatus, setInitStatus] = React.useState(false);
     useEffect(() => {
         init();
@@ -118,29 +131,19 @@ export function APItestDialog(props) {
     const handleChange = (event: SelectChangeEvent) => {
         setRequestType(event.target.value);
     };
-
-
-
-
-
-    //@ts-ignore
-    const changeTestName = async (event) => {
+    const changeTestName = async (event:BaseSyntheticEvent) => {
         setTestName(event.target.value);
     }
-    //@ts-ignore
-    const changeTestBody = async (event) => {
+    const changeTestBody = async (event:BaseSyntheticEvent) => {
         setTestBody(event.target.value);
     }
-    //@ts-ignore
-    const changeRequestBody = async (event) => {
+    const changeRequestBody = async (event:BaseSyntheticEvent) => {
         setRequestBody(event.target.value);
     }
-    //@ts-ignore
-    const changeTestNameRequest = async (event) => {
+    const changeTestNameRequest = async (event:BaseSyntheticEvent) => {
         setRequestName(event.target.value);
     }
-    //@ts-ignore
-    const changeURL = async (event) => {
+    const changeURL = async (event:BaseSyntheticEvent) => {
         setUrl(event.target.value);
     }
 
@@ -155,14 +158,12 @@ export function APItestDialog(props) {
         })
         let event = new Event("SaveTest");
         document.dispatchEvent(event);
-        // @ts-ignore
         await response.json().then((result) => {
             console.log(result);
         })
     }
 
-    //@ts-ignore
-    const loadRequest = async (event,value) => {
+    const loadRequest = async (event: any,value: string) => {
         console.log(value)
         const response: Response = await fetch('/api/load_api_request_data', {
             method: 'POST',
@@ -172,7 +173,7 @@ export function APItestDialog(props) {
             },
             body: JSON.stringify({apiTestName: value})
         })
-        // @ts-ignore
+
         await response.json().then((result) => {
             setUrl(result.url);
             setRequestBody(result.requestBody);
@@ -190,7 +191,6 @@ export function APItestDialog(props) {
         }
         if(requestType === 'POST'){
             //@ts-ignore
-            // params['body'] = JSON.stringify({testName: `${testName}.test.ts`, testBody: testBody})
             params['body'] = JSON.stringify(requestBody)
         }
 
@@ -225,7 +225,6 @@ export function APItestDialog(props) {
             setResponseResult(error);
         })
     }
-
 
     const deleteRequest = async () => {
         const params = {

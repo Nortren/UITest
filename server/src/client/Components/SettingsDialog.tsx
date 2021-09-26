@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
+import {styled} from '@mui/material/styles';
 import Dialog from '@mui/material/Dialog';
 import DialogTitle from '@mui/material/DialogTitle';
 import DialogContent from '@mui/material/DialogContent';
@@ -12,7 +12,7 @@ import Checkbox from '@mui/material/Checkbox';
 import {useEffect} from "react";
 import {SaveButton} from "./SaveButton";
 
-const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+const BootstrapDialog = styled(Dialog)(({theme}) => ({
     '& .MuDialogContent-root': {
         padding: theme.spacing(2),
     },
@@ -21,16 +21,27 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     },
 }));
 
-export interface DialogTitleProps {
+export interface IDialogTitleProps {
     id: string;
     children?: React.ReactNode;
     onClose: () => void;
 }
 
-const BootstrapDialogTitle = (props: DialogTitleProps) => {
-    const { children, onClose, ...other } = props;
+export interface ISettingsDialog {
+    open: boolean;
+    closeSetting: () => void;
+    openSetting: () => void;
+}
+
+type  ISettingsTest  = {
+    headless: boolean,
+    browserSettings: any
+}
+
+const BootstrapDialogTitle = (props: IDialogTitleProps) => {
+    const {children, onClose, ...other} = props;
     return (
-        <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
+        <DialogTitle sx={{m: 0, p: 2}} {...other}>
             {children}
             {onClose ? (
                 <IconButton
@@ -54,15 +65,18 @@ const BootstrapDialogTitle = (props: DialogTitleProps) => {
         </DialogTitle>
     );
 };
-//@ts-ignore
-export function SettingsDialog(props) {
+
+/**
+ * The Settings menu component
+ * @param props
+ * @constructor
+ */
+export function SettingsDialog(props: ISettingsDialog) {
     const handleClose = () => {
         props.closeSetting()
     };
 
-
-
-    const [settingsTest, setSettingsTest] = React.useState({});
+    const [settingsTest, setSettingsTest] = React.useState<ISettingsTest>();
     const initSettings = async () => {
         const response: Response = await fetch('/api/get_settings_test', {
             method: 'GET',
@@ -71,8 +85,7 @@ export function SettingsDialog(props) {
                 'Accept': 'application/json',
             },
         })
-        //@ts-ignore
-        response.json().then((result)=>{
+        response.json().then((result) => {
             setSettingsTest(JSON.parse(result));
         })
 
@@ -86,20 +99,16 @@ export function SettingsDialog(props) {
             },
             body: JSON.stringify(settingsTest)
         })
-        // @ts-ignore
         await response.json().then((result) => {
             console.log(result);
         })
     };
-    //@ts-ignore
-    const changeSettingStatus = (settingsItem,status,browderSettings?: boolean) => {
-        //@ts-ignore
-        if(browderSettings){
-            //@ts-ignore
+
+    const changeSettingStatus = (settingsItem: string, status: boolean, browderSettings?: boolean) => {
+        if (browderSettings && settingsTest) {
             settingsTest['browserSettings'][settingsItem] = status
-        }else{
-            //@ts-ignore
-            settingsTest[settingsItem] = status
+        } else if (settingsTest && settingsItem === "headless"){
+            settingsTest.headless = status
         }
 
     }
@@ -121,18 +130,24 @@ export function SettingsDialog(props) {
                 <DialogContent dividers style={{minWidth: '500px'}}>
                     <FormGroup>
                         launchOptions
-                        {Object.keys(settingsTest).map((settingsItem: string) => {
+                        {settingsTest && Object.keys(settingsTest).map((settingsItem: string) => {
                             //@ts-ignore
                             const checkedStatus = settingsTest[settingsItem];
                             return (
-                                settingsItem !== 'browserSettings' ? <FormControlLabel control={<Checkbox defaultChecked={checkedStatus} onChange={(event, status)=>{changeSettingStatus(settingsItem,status)}} />} label={settingsItem} /> :
-                                   //@ts-ignore
+                                settingsItem !== 'browserSettings' ? <FormControlLabel
+                                        control={<Checkbox defaultChecked={checkedStatus} onChange={(event, status) => {
+                                            changeSettingStatus(settingsItem, status)
+                                        }}/>} label={settingsItem}/> :
                                     Object.keys(settingsTest['browserSettings']).map((browserSettingsItem: string) => {
-                                        //@ts-ignore
                                         const checkedStatus = settingsTest['browserSettings'][browserSettingsItem];
-                                        return (<FormControlLabel control={<Checkbox defaultChecked={checkedStatus} onChange={(event, status)=>{changeSettingStatus(browserSettingsItem,status,true)}} />} label={browserSettingsItem} />)
+                                        return (<FormControlLabel control={<Checkbox defaultChecked={checkedStatus}
+                                                                                     onChange={(event, status) => {
+                                                                                         changeSettingStatus(browserSettingsItem, status, true)
+                                                                                     }}/>}
+                                                                  label={browserSettingsItem}/>)
                                     })
-                        )})}
+                            )
+                        })}
 
                     </FormGroup>
                 </DialogContent>
