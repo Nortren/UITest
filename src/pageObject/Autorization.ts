@@ -9,10 +9,10 @@ export class Autorization {
         this.page = page;
     }
     async init() {
-        const USERNAME = 'timofei.trunov+no-mtp@inten.to'
-        const PASSWORD = 'timofei.trunov+no-mtp@inten.to'
+        const USERNAME = ''
+        const PASSWORD = ''
 
-        await this.page.goto('https://portal-stage.inten.to/');
+        await this.page.goto('');
 
         await this.page.click('text=Sign in');
         await this.page.fill('input[id="login-email"]', USERNAME);
